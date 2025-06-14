@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Editable Resume - Stylish Enhancv Inspired with PDF Download</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+<style>
+  /* Reset */
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+  body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(135deg, #f0f4ff, #e5e8ff);
+    color: #2c3e50;
+    line-height: 1.6;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    min-height: 100vh;
+    padding: 24px 0;
+  }
+
+  a {
+    color: #5a67d8;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+  a:hover, a:focus {
+    color: #434190;
+    text-decoration: underline;
+  }
+
+  h1, h2, h3, h4 {
+    margin: 0 0 0.3em 0;
+    font-weight: 700;
+    color: #1a202c;
+  }
+
+  h1 {
+    font-size: 2.8rem;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+  }
+  h2 {
+    font-size: 1.75rem;
+    border-bottom: 3px solid #c3b5f4;
+    padding-bottom: 0.4em;
+    margin-bottom: 1.5em;
+    color: #4c51bf;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+  }
+  h3 {
+    font-size: 1.25rem;
+    color: #2d3748;
+    text-transform: capitalize;
+  }
+
+  p {
+    margin: 0 0 1.2em 0;
+    color: #4a5568;
+  }
+
+  /* Container */
+  .container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 32px;
+    background: white;
+    border-radius: 24px;
+    box-shadow: 0 24px 48px rgba(66, 66, 88, 0.12);
+  }
+
+  /* Download button container */
+  .actions {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 24px;
+  }
+  .download-btn {
+    cursor: pointer;
+    background-color: #667eea;
+    color: white;
+    border: none;
+    border-radius: 36px;
+    padding: 12px 28px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    box-shadow: 0 6px 16px rgba(102, 126, 234, 0.6);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: background-color 0.3s ease;
+  }
+  .download-btn:hover {
+    background-color: #4858c9;
+  }
+  .download-btn .material-icons {
+    font-size: 22px;
+  }
+
+  /* Layout: stack left and right columns vertically with subtle dividing lines */
+  .resume-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 48px;
+    padding: 40px 0;
+  }
+
+  /* Left Column */
+  .left-column {
+    background: #f9f9ff;
+    border-radius: 24px;
+    padding: 32px 28px;
+    box-shadow: 0 12px 24px rgba(92, 93, 112, 0.08);
+    user-select: none;
+  }
+
+  /* Right Column */
+  .right-column {
+    background: white;
+    padding: 0 8px;
+  }
+
+  /* Profile image */
+  .profile-image {
+    width: 140px;
+    height: 140px;
+    border-radius: 100%;
+    object-fit: cover;
+    margin: 0 auto 36px;
+    display: block;
+    border: 4px solid #a3bffa;
+    box-shadow:
+      0 8px 16px rgba(67, 89, 178, 0.12),
+      inset 0 0 15px rgba(82, 111, 255, 0.2);
+    transition: box-shadow 0.3s ease;
+  }
+  .profile-image:hover {
+    box-shadow:
+      0 14px 28px rgba(67, 89, 178, 0.22),
+      inset 0 0 25px rgba(82, 111, 255, 0.4);
+  }
+  .profile-image-input {
+    display: block;
+    margin: 12px auto 40px;
+    width: 140px;
+    border-radius: 12px;
+    cursor: pointer;
+  }
+
+  /* Name and Title */
+  .name {
+    font-size: 2.8rem;
+    font-weight: 900;
+    color: #2d3748;
+    text-align: center;
+    margin-bottom: 10px;
+    user-select: text;
+  }
+  .title {
+    font-size: 1.2rem;
+    color: #7f9cf5;
+    text-align: center;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 48px;
+    user-select: text;
+  }
+
+  /* Editable fields */
+  .editable {
+    outline: none;
+    cursor: text;
+    padding: 6px 8px;
+    border-radius: 10px;
+    line-height: 1.5;
+    background: transparent;
+    transition: background-color 0.25s ease, box-shadow 0.25s ease;
+    min-height: 1.5em;
+    user-select: text;
+    margin-bottom: 16px;
+  }
+  .editable:focus {
+    background-color: #c7d2fe;
+    box-shadow: 0 0 0 3px #5a67d8;
+  }
+  .editable.multiline {
+    min-height: 5em;
+    white-space: pre-wrap;
+    margin-bottom: 24px;
+  }
+
+  /* Contact Info */
+  .contact-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 24px;
+    color: #6b7280;
+    font-weight: 600;
+    user-select: none;
+  }
+  .contact-item .material-icons {
+    font-size: 24px;
+    margin-right: 14px;
+    color: #5a67d8;
+    flex-shrink: 0;
+  }
+  .contact-item .editable {
+    flex-grow: 1;
+    min-width: 0;
+    user-select: text;
+    font-weight: 600;
+    color: #374151;
+  }
+  .contact-item .editable[contenteditable] {
+    text-decoration: none;
+    margin-bottom: 0;
+  }
+
+  /* Lists */
+  ul.skill-list, ul.language-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 -12px 24px -12px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  ul.language-list {
+    flex-wrap: nowrap;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .skill-list li, .language-list li {
+    background: linear-gradient(135deg, #7f9cf5, #667eea);
+    color: white;
+    padding: 10px 22px;
+    border-radius: 30px;
+    font-weight: 700;
+    font-size: 1rem;
+    user-select: text;
+    box-shadow: 0 4px 12px rgba(101, 126, 234, 0.6);
+    transition: background 0.3s ease;
+  }
+  .skill-list li:focus {
+    outline: none;
+    background: #5865d6;
+    box-shadow: 0 0 14px #5865d6;
+  }
+  .language-list li {
+    background: transparent;
+    color: #4a5568;
+    padding: 0;
+    font-weight: 600;
+  }
+  .language-level {
+    font-weight: 400;
+    color: #a0aec0;
+    font-size: 0.95rem;
+    margin-left: 10px;
+  }
+
+  /* Summary */
+  .summary-text {
+    font-size: 1.15rem;
+    color: #475569;
+    line-height: 1.7;
+    letter-spacing: 0.015em;
+    margin-bottom: 32px;
+  }
+
+  /* Experience and Education */
+  .item {
+    margin-bottom: 42px;
+    border-left: 5px solid #a3bffa;
+    padding-left: 28px;
+    transition: border-color 0.3s ease;
+  }
+  .item:last-child {
+    margin-bottom: 0;
+  }
+  .item:hover {
+    border-color: #667eea;
+  }
+  .item-header {
+    display: flex;
+    justify-content: space-between;
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: #2d3748;
+    margin-bottom: 12px;
+    align-items: center;
+  }
+  .item-subheader {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #5a67d8;
+    margin-bottom: 16px;
+  }
+  .item-description {
+    font-size: 1.05rem;
+    color: #4a5568;
+    line-height: 1.65;
+    white-space: pre-wrap;
+    margin-bottom: 24px;
+  }
+  /* Editable blocks in experience/education */
+  .item-header .editable {
+    max-width: 65%;
+    user-select: text;
+    margin-bottom: 0;
+  }
+  .item-subheader .editable {
+    display: inline-block;
+    margin-bottom: 0;
+  }
+  .item-description .editable {
+    display: block;
+    user-select: text;
+  }
+
+  /* Buttons for adding skills/languages/experience */
+  .add-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 22px;
+    margin-top: 24px;
+    border: 2.5px solid #667eea;
+    border-radius: 36px;
+    color: #4c51bf;
+    font-weight: 700;
+    font-size: 1.1rem;
+    background: transparent;
+    cursor: pointer;
+    user-select: none;
+    box-shadow: 0 0 14px rgba(102, 126, 234, 0.55);
+    transition: background-color 0.3s ease, color 0.3s ease;
+    margin-bottom: 48px;
+  }
+  .add-btn:hover {
+    background-color: #667eea;
+    color: white;
+  }
+  .add-btn .material-icons {
+    font-size: 22px;
+  }
+
+  /* Responsive */
+  @media (min-width: 768px) {
+    .resume-grid {
+      grid-template-columns: 1fr 2fr;
+      align-items: start;
+    }
+  }
+  @media (max-width: 767px) {
+    .resume-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* Placeholder styling for editable */
+  .editable.empty::before {
+    content: attr(data-placeholder);
+    color: #a0aec0;
+    pointer-events: none;
+    user-select: none;
+    display: inline-block;
+  }
+  /* Remove placeholder text on focus */
+  .editable.empty:focus::before {
+    content: '';
+  }
+
+  /* Print */
+  @media print {
+    body {
+      background: white !important;
+      color: black !important;
+      box-shadow: none !important;
+      padding: 0 !important;
+    }
+    .container {
+      box-shadow: none !important;
+      background: white !important;
+      border-radius: 0 !important;
+      padding: 0 !important;
+    }
+    .editable {
+      outline: none !important;
+      box-shadow: none !important;
+      background: transparent !important;
+    }
+    .add-btn, input[type="file"] {
+      display: none !important;
+    }
+  }
+</style>
+</head>
+<body>
+  <div class="actions">
+    <button class="download-btn" id="downloadPdfBtn" aria-label="Download Resume as PDF">
+      <span class="material-icons" aria-hidden="true">picture_as_pdf</span> Download PDF
+    </button>
+  </div>
+  <div class="container" role="main" aria-label="Editable Resume" id="resumeContent">
+    <div class="resume-grid">
+      <aside class="left-column" aria-label="Personal Information">
+        <img class="profile-image" src="https://placehold.co/140x140?text=Photo" alt="Professional headshot" id="profileImage" />
+        <input type="file" accept="image/*" class="profile-image-input" aria-label="Upload profile image" id="uploadImage">
+
+        <h1 class="name editable empty" contenteditable="true" aria-label="Name" spellcheck="false" data-placeholder="Enter your name">Jane Smith</h1>
+        <p class="title editable empty" contenteditable="true" aria-label="Job title" spellcheck="false" data-placeholder="Enter your job title">Product Designer</p>
+
+        <section aria-labelledby="contact-info-title">
+          <h2 id="contact-info-title">Contact</h2>
+          <div class="contact-item">
+            <span class="material-icons" aria-hidden="true">email</span>
+            <a href="#" class="editable empty" contenteditable="true" aria-label="Email" spellcheck="false" data-placeholder="Enter your email">jane.smith@example.com</a>
+          </div>
+          <div class="contact-item">
+            <span class="material-icons" aria-hidden="true">phone</span>
+            <span class="editable empty" contenteditable="true" aria-label="Phone number" spellcheck="false" data-placeholder="Enter your phone number">+1 (987) 654-3210</span>
+          </div>
+          <div class="contact-item">
+            <span class="material-icons" aria-hidden="true">place</span>
+            <span class="editable empty" contenteditable="true" aria-label="Location" spellcheck="false" data-placeholder="Enter your location">New York, NY</span>
+          </div>
+          <div class="contact-item">
+            <span class="material-icons" aria-hidden="true">language</span>
+            <a href="#" class="editable empty" contenteditable="true" aria-label="Website" spellcheck="false" data-placeholder="Enter your website">janesmithportfolio.com</a>
+          </div>
+          <div class="contact-item">
+            <span class="material-icons" aria-hidden="true">linkedin</span>
+            <a href="#" class="editable empty" contenteditable="true" aria-label="LinkedIn profile" spellcheck="false" data-placeholder="Enter your LinkedIn URL">linkedin.com/in/janesmith</a>
+          </div>
+          <div class="contact-item">
+            <span class="material-icons" aria-hidden="true">github</span>
+            <a href="#" class="editable empty" contenteditable="true" aria-label="GitHub profile" spellcheck="false" data-placeholder="Enter your GitHub URL">github.com/janesmith</a>
+          </div>
+        </section>
+
+        <section aria-labelledby="skills-title">
+          <h2 id="skills-title">Skills</h2>
+          <ul class="skill-list" aria-label="Professional skills list" id="skillsList">
+            <li class="editable empty" contenteditable="true" spellcheck="false" data-placeholder="Enter skill">UI/UX Design</li>
+            <li class="editable empty" contenteditable="true" spellcheck="false" data-placeholder="Enter skill">Figma</li>
+            <li class="editable empty" contenteditable="true" spellcheck="false" data-placeholder="Enter skill">Adobe XD</li>
+            <li class="editable empty" contenteditable="true" spellcheck="false" data-placeholder="Enter skill">Prototyping</li>
+            <li class="editable empty" contenteditable="true" spellcheck="false" data-placeholder="Enter skill">Sketch</li>
+            <li class="editable empty" contenteditable="true" spellcheck="false" data-placeholder="Enter skill">User Research</li>
+            <li class="editable empty" contenteditable="true" spellcheck="false" data-placeholder="Enter skill">Design Systems</li>
+          </ul>
+          <button class="add-btn" type="button" id="addSkillBtn" aria-label="Add new skill">
+            <span class="material-icons" aria-hidden="true">add</span> Add Skill
+          </button>
+        </section>
+
+        <section aria-labelledby="languages-title">
+          <h2 id="languages-title">Languages</h2>
+          <ul class="language-list" aria-label="Languages spoken with proficiency levels" id="languageList">
+            <li class="editable empty" contenteditable="true" spellcheck="false" data-placeholder="Enter language">
+              English <span class="language-level editable empty" contenteditable="true" spellcheck="false" data-placeholder="Enter proficiency">(Native)</span>
+            </li>
+            <li class="editable empty" contenteditable="true" spellcheck="false" data-placeholder="Enter language">
+              French <span class="language-level editable empty" contenteditable="true" spellcheck="false" data-placeholder="Enter proficiency">(Professional)</span>
+            </li>
+            <li class="editable empty" contenteditable="true" spellcheck="false" data-placeholder="Enter language">
+              Japanese <span class="language-level editable empty" contenteditable="true" spellcheck="false" data-placeholder="Enter proficiency">(Conversational)</span>
+            </li>
+          </ul>
+          <button class="add-btn" type="button" id="addLanguageBtn" aria-label="Add new language">
+            <span class="material-icons" aria-hidden="true">add</span> Add Language
+          </button>
+        </section>
+      </aside>
+
+      <section class="right-column" aria-label="Main resume content">
+        <section aria-labelledby="summary-title">
+          <h2 id="summary-title">Summary</h2>
+          <p class="summary-text editable multiline empty" contenteditable="true" aria-label="Summary paragraph" spellcheck="false" data-placeholder="Enter a brief summary about yourself.">
+            Creative Product Designer with 7+ years experience crafting engaging interfaces and delightful experiences across mobile and web platforms. Skilled in user research, prototyping, and design system implementation.
+          </p>
+        </section>
+
+        <section aria-labelledby="experience-title">
+          <h2 id="experience-title">Experience</h2>
+
+          <article class="item" aria-label="Experience 1">
+            <div class="item-header">
+              <span class="editable empty" contenteditable="true" spellcheck="false" data-placeholder="Job title">Lead Product Designer</span>
+              <time datetime="2020-03">
+                <span class="editable empty" contenteditable="true" spellcheck="false" data-placeholder="Start date">Mar 2020</span> – <span class="editable empty" contenteditable="true" spellcheck="false" data-placeholder="End date">Present</span>
+              </time>
+            </div>
+            <div class="item-subheader editable empty" contenteditable="true" spellcheck="false" data-placeholder="Company and location">Creative Co, New York, NY</div>
+            <p class="item-description editable multiline empty" contenteditable="true" spellcheck="false" data-placeholder="Describe your responsibilities and achievements.">
+              Headed design strategy for flagship products, managed end-to-end design process from wireframes to high-fidelity prototypes. Collaborated with cross-functional teams to deliver user-centered solutions that increased customer retention by 20%.
+            </p>
+          </article>
+
+          <article class="item" aria-label="Experience 2">
+            <div class="item-header">
+              <span class="editable empty" contenteditable="true" spellcheck="false" data-placeholder="Job title">Product Designer</span>
+              <time datetime="2015-08">
+                <span class="editable empty" contenteditable="true" spellcheck="false" data-placeholder="Start date">Aug 2015</span> – <span class="editable empty" contenteditable="true" spellcheck="false" data-placeholder="End date">Feb 2020</span>
+              </time>
+            </div>
+            <div class="item-subheader editable empty" contenteditable="true" spellcheck="false" data-placeholder="Company and location">Startup Inc, Remote</div>
+            <p class="item-description editable multiline empty" contenteditable="true" spellcheck="false" data-placeholder="Describe your responsibilities and achievements.">
+              Designed and iterated UI components, conducted usability testing and user interviews. Improved onboarding flow resulting in a 15% lift in user activation and reduced churn.
+            </p>
+          </article>
+
+          <button class="add-btn" type="button" id="addExperienceBtn" aria-label="Add new experience">
+            <span class="material-icons" aria-hidden="true">add</span> Add Experience
+          </button>
+        </section>
+
+        <section aria-labelledby="education-title">
+          <h2 id="education-title">Education</h2>
+
+          <article class="item" aria-label="Education 1">
+            <div class="item-header">
+              <span class="editable empty" contenteditable="true" spellcheck="false" data-placeholder="Degree and major">Bachelor of Arts, Graphic Design</span>
+              <time datetime="2011-09">
+                <span class="editable empty" contenteditable="true" spellcheck="false" data-placeholder="Start date">Sep 2011</span> – <span class="editable empty" contenteditable="true" spellcheck="false" data-placeholder="End date">May 2015</span>
+              </time>
+            </div>
+            <div class="item-subheader editable empty" contenteditable="true" spellcheck="false" data-placeholder="School name and location">School of Visual Arts, New York, NY</div>
+            <p class="item-description editable multiline empty" contenteditable="true" spellcheck="false" data-placeholder="Additional details about your education.">
+              Specialized in digital design with a focus on branding, typography, and interactive media.
+            </p>
+          </article>
+
+          <button class="add-btn" type="button" id="addEducationBtn" aria-label="Add new education">
+            <span class="material-icons" aria-hidden="true">add</span> Add Education
+          </button>
+        </section>
+
+      </section>
+    </div>
+  </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script>
+  // Placeholder handling for contenteditable elements
+  function refreshPlaceholders() {
+    document.querySelectorAll('[contenteditable]').forEach(el => {
+      if (!el.textContent.trim()) {
+        el.classList.add('empty');
+        el.setAttribute('aria-label', el.dataset.placeholder || '');
+      } else {
+        el.classList.remove('empty');
+      }
+    });
+  }
+
+  document.body.addEventListener('focusin', (e) => {
+    const target = e.target;
+    if (target.hasAttribute('contenteditable')) {
+      if (target.classList.contains('empty')) {
+        target.textContent = '';
+        target.classList.remove('empty');
+      }
+    }
+  });
+
+  document.body.addEventListener('focusout', (e) => {
+    const target = e.target;
+    if (target.hasAttribute('contenteditable')) {
+      if (!target.textContent.trim()) {
+        target.classList.add('empty');
+        target.textContent = '';
+      }
+    }
+  });
+
+  refreshPlaceholders();
+
+  // Profile image upload preview
+  const imgInput = document.getElementById('uploadImage');
+  const profileImg = document.getElementById('profileImage');
+  imgInput.addEventListener('change', e => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = evt => {
+      profileImg.src = evt.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+
+  // Add skill dynamically
+  document.getElementById('addSkillBtn').addEventListener('click', () => {
+    const ul = document.getElementById('skillsList');
+    const li = document.createElement('li');
+    li.classList.add('editable', 'empty');
+    li.contentEditable = 'true';
+    li.spellcheck = false;
+    li.setAttribute('data-placeholder', 'Enter skill');
+    li.textContent = '';
+    ul.appendChild(li);
+    li.focus();
+  });
+
+  // Add language dynamically
+  document.getElementById('addLanguageBtn').addEventListener('click', () => {
+    const ul = document.getElementById('languageList');
+    const li = document.createElement('li');
+    li.classList.add('editable', 'empty');
+    li.contentEditable = 'true';
+    li.spellcheck = false;
+    li.setAttribute('data-placeholder', 'Enter language');
+    li.innerHTML = '<span contenteditable="true" spellcheck="false" data-placeholder="Enter language"></span> <span class="language-level editable empty" contenteditable="true" spellcheck="false" data-placeholder="Enter proficiency">(Proficiency)</span>';
+    ul.appendChild(li);
+    const langSpan = li.querySelector('span');
+    langSpan.focus();
+  });
+
+  // Add experience dynamically
+  document.getElementById('addExperienceBtn').addEventListener('click', () => {
+    const expSection = document.getElementById('experience-title').parentElement;
+    const article = document.createElement('article');
+    article.classList.add('item');
+    article.setAttribute('aria-label', 'New Experience');
+
+    article.innerHTML = `
+      <div class="item-header">
+        <span class="editable empty" contenteditable="true" spellcheck="false" data-placeholder="Job title"></span>
+        <time datetime="">
+          <span class="editable empty" contenteditable="true" spellcheck="false" data-placeholder="Start date"></span> – <span class="editable empty" contenteditable="true" spellcheck="false" data-placeholder="End date"></span>
+        </time>
+      </div>
+      <div class="item-subheader editable empty" contenteditable="true" spellcheck="false" data-placeholder="Company and location"></div>
+      <p class="item-description editable multiline empty" contenteditable="true" spellcheck="false" data-placeholder="Describe your responsibilities and achievements."></p>
+    `;
+    expSection.insertBefore(article, expSection.querySelector('button.add-btn'));
+    article.querySelector('[contenteditable]').focus();
+  });
+
+  // Add education dynamically
+  document.getElementById('addEducationBtn').addEventListener('click', () => {
+    const eduSection = document.getElementById('education-title').parentElement;
+    const article = document.createElement('article');
+    article.classList.add('item');
+    article.setAttribute('aria-label', 'New Education');
+
+    article.innerHTML = `
+      <div class="item-header">
+        <span class="editable empty" contenteditable="true" spellcheck="false" data-placeholder="Degree and major"></span>
+        <time datetime="">
+          <span class="editable empty" contenteditable="true" spellcheck="false" data-placeholder="Start date"></span> – <span class="editable empty" contenteditable="true" spellcheck="false" data-placeholder="End date"></span>
+        </time>
+      </div>
+      <div class="item-subheader editable empty" contenteditable="true" spellcheck="false" data-placeholder="School name and location"></div>
+      <p class="item-description editable multiline empty" contenteditable="true" spellcheck="false" data-placeholder="Additional details about your education."></p>
+    `;
+    eduSection.insertBefore(article, eduSection.querySelector('button.add-btn'));
+    article.querySelector('[contenteditable]').focus();
+  });
+
+  // Download PDF functionality
+  const { jsPDF } = window.jspdf;
+  const downloadBtn = document.getElementById('downloadPdfBtn');
+  const resumeContent = document.getElementById('resumeContent');
+
+  downloadBtn.addEventListener('click', () => {
+    // Temporarily remove focus to avoid caret in PDF
+    document.activeElement.blur();
+
+    // Use html2canvas to capture resume as image to embed in PDF
+    html2canvas(resumeContent, {
+      scale: 2,
+      useCORS: true,
+      backgroundColor: null,
+    }).then(canvas => {
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF({
+        unit: 'pt',
+        format: 'a4',
+      });
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = pdf.internal.pageSize.getHeight();
+
+      // Calculate image height to keep aspect ratio
+      const imgProps = {
+        width: canvas.width,
+        height: canvas.height,
+      };
+      const ratio = Math.min(pdfWidth / imgProps.width, pdfHeight / imgProps.height);
+      const imgWidth = imgProps.width * ratio;
+      const imgHeight = imgProps.height * ratio;
+
+      pdf.addImage(imgData, 'PNG', (pdfWidth - imgWidth) / 2, 20, imgWidth, imgHeight);
+      pdf.save('resume.pdf');
+    }).catch(err => {
+      alert('Failed to generate PDF. Please try again.');
+      console.error(err);
+    });
+  });
+</script>
+</body>
+</html>
